@@ -6,6 +6,45 @@
 
 博客: [blog](https://rce.ink)
 
+
+## Testing
+
+对存在漏洞的环境使用插件测试。
+
+1.开启存在log4shell漏洞的spring环境
+
+![image](https://user-images.githubusercontent.com/42985524/179281562-99b87b88-3ec1-4d6f-bb9d-0ed5d42a3f76.png)
+
+![image](https://user-images.githubusercontent.com/42985524/179281661-6438f36a-02c8-423e-a90e-ec432262909d.png)
+
+2.spring部分环境下 对accpet插入恶意payload会导致log4shell漏洞产生
+
+我们在api配置参数 insertaccept 为 true 代表每一个被动payload 都会对accept的header头插入payload
+
+启动server.py 的流量捕获脚本 在api后台配置 探测接口
+
+![image](https://user-images.githubusercontent.com/42985524/179282496-e73a6ea3-505e-484f-bb53-2d74dba1a41b.png)
+
+![image](https://user-images.githubusercontent.com/42985524/179282266-f2d5766e-a2d8-4905-be8b-d08cdf15641d.png)
+
+3.开启插件
+
+![image](https://user-images.githubusercontent.com/42985524/179282397-17bcc429-451f-4aa9-be5e-dc0ab923f9cd.png)
+
+4.切换到漏洞界面 开启burp代理 后随便点击
+
+![image](https://user-images.githubusercontent.com/42985524/179288890-aa77dd4b-b469-4a6c-87f0-34d087c5a493.png)
+
+发现webhook 触发
+
+![image](https://user-images.githubusercontent.com/42985524/179288948-48d19077-04c4-4d72-9b89-33ba7b48d619.png)
+
+5.进入后台观察流量
+
+![image](https://user-images.githubusercontent.com/42985524/179289129-8605aaa7-640e-43d0-828f-2f0ef429af4b.png)
+
+发现确实是请求包的accept头部被插入了恶意payload 触发了远端webhook。证明此来源地址疑似存在log4shell漏洞。
+
 ## Update log
 
 ...
@@ -61,5 +100,4 @@
 污染报文查看:
 
 ![image](https://user-images.githubusercontent.com/42985524/179278958-7e08a18f-0d57-413e-96e6-836b4ae72244.png)
-
 
